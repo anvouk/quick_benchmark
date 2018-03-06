@@ -25,7 +25,7 @@ void test_asm(int val) {
 }
 
 int main() {
-    BENCHMARK_GROUP_START(10, 100); // benchmarks on 100 calls and for 10 times
+    BENCHMARK_GROUP_START(10, 100); // benchmarks on 100 calls for 10 times
         BENCHMARK_GROUP_ADD(test_c, 0);
         BENCHMARK_GROUP_ADD(test_asm, 0);
     BENCHMARK_GROUP_END();
