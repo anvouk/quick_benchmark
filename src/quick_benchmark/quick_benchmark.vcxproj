@@ -115,7 +115,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="aps_benchmark.h" />
+    <ClInclude Include="quick_benchmark.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

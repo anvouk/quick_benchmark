@@ -1,4 +1,4 @@
-#include "aps_benchmark.h"
+#include "quick_benchmark.h"
 
 /*-------------------------------------------------------------------------
 	functions to benchmark
