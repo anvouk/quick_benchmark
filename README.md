@@ -10,7 +10,7 @@ void test(int val)
 
 int main()
 {
-    // Benchmark over 150 calls of test(10) and print the result to stdout.
+    // Benchmark against 150 calls of test(10) and print the result to stdout.
     BENCHMARK_N(stdout, 150, test, 10);
     
     // Just like before but this time iterates over 1000 function calls.
