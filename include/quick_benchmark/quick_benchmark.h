@@ -81,7 +81,7 @@ unsigned __int64 __rdtsc(void);
 			_end = (uint64_t)BENCHMARK_BENCH_FUNC(); \
 			_tot += _end - _start; \
 		} \
-		fprintf(file, "[" QBSTR(x) "(" QBSTR(__VA_ARGS__) ")]: \t%.4d times\t\tcycles: %lld\n", \
+		fprintf(file, "[" QBSTR(x) "(" QBSTR(__VA_ARGS__) ")]: \tcalls: %.4d\t\tcycles: %lld\n", \
 			(int)n_runs, _tot / n_runs); \
 	} while(0)
 
