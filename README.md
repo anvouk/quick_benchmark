@@ -22,27 +22,27 @@ int main()
 ```cpp
 MSVC_NOINLINE void test_a(int val) GCC_NOINLINE
 {
-	val -= 256;
+    val -= 256;
 }
 
 MSVC_NOINLINE void test_b(int val) GCC_NOINLINE
 {
-	val += val;
+    val += val;
 }
 
 MSVC_NOINLINE void test_c(int val) GCC_NOINLINE
 {
-	val *= val;
+    val *= val;
 }
 
 int main()
 {
     // Every function is benchmarked against 2000 iterations for 5 times.
-	BENCHMARK_GROUP_START(stdout, 5, 2000);
-		BENCHMARK_GROUP_ADD(test_a, -10);
-		BENCHMARK_GROUP_ADD(test_b, 20);
-		BENCHMARK_GROUP_ADD(test_b, 200);
-		BENCHMARK_GROUP_ADD(test_c, 40);
-	BENCHMARK_GROUP_END();
+    BENCHMARK_GROUP_START(stdout, 5, 2000);
+        BENCHMARK_GROUP_ADD(test_a, -10);
+        BENCHMARK_GROUP_ADD(test_b, 20);
+        BENCHMARK_GROUP_ADD(test_b, 200);
+        BENCHMARK_GROUP_ADD(test_c, 40);
+    BENCHMARK_GROUP_END();
 }
 ```
