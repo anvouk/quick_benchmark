@@ -9,13 +9,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>examples</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="quick_benchmark.h">
+    <ClInclude Include="..\..\include\quick_benchmark\quick_benchmark.h">
       <Filter>include</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\examples\main.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
