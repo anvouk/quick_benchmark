@@ -49,10 +49,10 @@
 #  endif /* !GCC_NOINLINE */
 #else
 #  ifndef MSVC_NOINLINE
-#    define MSVC_NOINLINE __declspec(noinline)
+#    define MSVC_NOINLINE
 #  endif /* !MSVC_NOINLINE */
 #  ifndef GCC_NOINLINE
-#    define GCC_NOINLINE __declspec(noinline)
+#    define GCC_NOINLINE __attribute__((noinline))
 #  endif /* !GCC_NOINLINE */
 #endif /* _MSC_VER */
 
@@ -61,7 +61,7 @@
 #    ifdef __cplusplus
 extern "C" {
 #    endif
-unsigned __int64 __rdtsc(void);
+unsigned long long __rdtsc(void);
 #    ifdef __cplusplus
 }
 #    endif
