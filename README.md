@@ -11,43 +11,43 @@ A simple C/C++ one header file for quick and dirty benchmarking.<br><br>
 
 ## Quick start
 ```cpp
-void test_a(int* v1, float v2, float v3)
+void multi_param_func(int* v1, float v2, float v3)
 {
     /* ... */
 }
 
-void test_b()
+void no_param_func()
 {
     /* ... */
 }
 
-void test_c1(int val)
+void func_version_a(int val)
 {
     /* ... */
 }
 
-void test_c2(int val)
+void func_version_b(int val)
 {
     /* ... */
 }
 
-void test_c3(int val)
+void func_version_c(int val)
 {
     /* ... */
 }
 
 int main()
 {
-	/* ... */
+    /* ... */
 
-    BENCHMARK_N(stdout, 1000, test_a, &v1, v2, v3);
-    BENCHMARK(test_b);
+    BENCHMARK_N(stdout, 1000, multi_param_func, &v1, v2, v3);
+    BENCHMARK(no_param_func);
 
     BENCHMARK_GROUP_BEGIN(stdout, 5, 2000);
-        BENCHMARK_GROUP_ADD(test_c1, 40);
-        BENCHMARK_GROUP_ADD(test_c2, 40);
-        BENCHMARK_GROUP_ADD(test_c3, 40);
-        BENCHMARK_GROUP_ADD(test_c3, 4342);
+        BENCHMARK_GROUP_ADD(func_version_a, 40);
+        BENCHMARK_GROUP_ADD(func_version_b, 40);
+        BENCHMARK_GROUP_ADD(func_version_c, 40);
+        BENCHMARK_GROUP_ADD(func_version_c, 4342);
     BENCHMARK_GROUP_END();
 }
 ```
