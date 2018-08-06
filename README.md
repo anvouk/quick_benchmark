@@ -13,7 +13,7 @@ A simple C/C++ one header file for quick and dirty benchmarking.<br><br>
 ```cpp
 void test_a(int* v1, float v2, float v3)
 {
-	/* ... */
+    /* ... */
 }
 
 void test_b()
