@@ -1,48 +1,53 @@
 # quick_benchmark
-A simple C/C++ one header only library for benchmarking
+A simple C/C++ one header file for quick and dirty benchmarking.<br><br>
+<i><b>See more examples in the <a href="https://github.com/QwertyQaz414/quick_benchmark/tree/master/examples">example folder.</a></i></b>
+
+## Features
+- Less than 200 lines of code.
+- Customizable benchmark function.
+- Cross-platform.
+- No dependencies (No POSIX libraries. Only standard C libraries).
+- Extremely easy and quick to use.
 
 ## Quick start
 ```cpp
-void test(int val)
+void multi_param_func(int* v1, float v2, float v3)
 {
-    val += 256;
+    /* ... */
+}
+
+void no_param_func()
+{
+    /* ... */
+}
+
+void func_version_a(int val)
+{
+    /* ... */
+}
+
+void func_version_b(int val)
+{
+    /* ... */
+}
+
+void func_version_c(int val)
+{
+    /* ... */
 }
 
 int main()
 {
-    // Benchmark against 150 calls of test(10) and print the result to stdout.
-    BENCHMARK_N(stdout, 150, test, 10);
-    
-    // Just like before but this time iterates over 1000 function calls.
-    BENCHMARK(test, 10);
-}
-```
+    /* ... */
 
-## Benchmark groups of functions
-```cpp
-MSVC_NOINLINE void test_a(int val) GCC_NOINLINE
-{
-    val -= 256;
-}
+    BENCHMARK_N(stdout, 1000, multi_param_func, &v1, v2, v3);
+    BENCHMARK(no_param_func);
 
-MSVC_NOINLINE void test_b(int val) GCC_NOINLINE
-{
-    val += val;
-}
-
-MSVC_NOINLINE void test_c(int val) GCC_NOINLINE
-{
-    val *= val;
-}
-
-int main()
-{
-    // Every function is benchmarked against 2000 iterations for 5 times.
-    BENCHMARK_GROUP_START(stdout, 5, 2000);
-        BENCHMARK_GROUP_ADD(test_a, -10);
-        BENCHMARK_GROUP_ADD(test_b, 20);
-        BENCHMARK_GROUP_ADD(test_b, 200);
-        BENCHMARK_GROUP_ADD(test_c, 40);
+    BENCHMARK_GROUP_BEGIN(stdout, 5, 2000);
+        BENCHMARK_GROUP_ADD(func_version_a, 40);
+        BENCHMARK_GROUP_ADD(func_version_b, 40);
+        BENCHMARK_GROUP_ADD(func_version_c, 40);
+        BENCHMARK_GROUP_ADD(func_version_c, 4342);
     BENCHMARK_GROUP_END();
 }
 ```
