@@ -40,23 +40,40 @@
 #define _QBSTR(...) #__VA_ARGS__
 #define QBSTR _QBSTR
 
+#define QB_VERSION_MAJOR 1
+#define QB_VERSION_MINOR 0
+#define QB_VERSION_PATCH 0
+#define QB_VERSION_STATE "stable"
+
+#define _QB_VERSION_STR(major, minor, patch) \
+	QBSTR(major) "." \
+	QBSTR(minor) "." \
+	QBSTR(patch) "-" \
+	QB_VERSION_STATE
+
+#define QB_VERSION_STR \
+	_QB_VERSION_STR(QB_VERSION_MAJOR, QB_VERSION_MINOR, QB_VERSION_PATCH)
+
+#define QB_VERSION_MAKE(major, minor, patch) \
+	((major) << 16) | ((minor) << 8) | (patch))
+
 #ifdef _MSC_VER
-#  ifndef MSVC_NOINLINE
-#    define MSVC_NOINLINE __declspec(noinline)
-#  endif /* !MSVC_NOINLINE */
-#  ifndef GCC_NOINLINE
-#    define GCC_NOINLINE
-#  endif /* !GCC_NOINLINE */
+#  ifndef QB_NOINLINE_MSVC
+#    define QB_NOINLINE_MSVC __declspec(noinline)
+#  endif /* !QB_NOINLINE_MSVC */
+#  ifndef QB_NOINLINE_GCC
+#    define QB_NOINLINE_GCC
+#  endif /* !QB_NOINLINE_GCC */
 #else
-#  ifndef MSVC_NOINLINE
-#    define MSVC_NOINLINE
-#  endif /* !MSVC_NOINLINE */
-#  ifndef GCC_NOINLINE
-#    define GCC_NOINLINE __attribute__((noinline))
-#  endif /* !GCC_NOINLINE */
+#  ifndef QB_NOINLINE_MSVC
+#    define QB_NOINLINE_MSVC
+#  endif /* !QB_NOINLINE_MSVC */
+#  ifndef QB_NOINLINE_GCC
+#    define QB_NOINLINE_GCC __attribute__((noinline))
+#  endif /* !QB_NOINLINE_GCC */
 #endif /* _MSC_VER */
 
-#ifndef BENCHMARK_BENCH_FUNC
+#ifndef QB_BENCHMARK_BENCH_FUNC
 #  ifdef _MSC_VER
 #    ifdef __cplusplus
 extern "C" {
@@ -65,20 +82,20 @@ unsigned long long __rdtsc(void);
 #    ifdef __cplusplus
 }
 #    endif
-#    define BENCHMARK_BENCH_FUNC __rdtsc
+#    define QB_BENCHMARK_BENCH_FUNC __rdtsc
 #  else
-#    define BENCHMARK_BENCH_FUNC __builtin_ia32_rdtsc
+#    define QB_BENCHMARK_BENCH_FUNC __builtin_ia32_rdtsc
 #  endif /* _MSC_VER */
-#endif /* !BENCHMARK_BENCH_FUNC */
+#endif /* !QB_BENCHMARK_BENCH_FUNC */
 
 #define BENCHMARK_N(file, n_runs, x, ...) \
 	do { \
 		uint64_t _tot = 0; \
 		for (int _j = 0; _j < n_runs; _j++) { \
 			uint64_t _start, _end;	\
-			_start = (uint64_t)BENCHMARK_BENCH_FUNC(); \
+			_start = (uint64_t)QB_BENCHMARK_BENCH_FUNC(); \
 			x(__VA_ARGS__); \
-			_end = (uint64_t)BENCHMARK_BENCH_FUNC(); \
+			_end = (uint64_t)QB_BENCHMARK_BENCH_FUNC(); \
 			_tot += _end - _start; \
 		} \
 		fprintf(file, "[" QBSTR(x) "(" QBSTR(__VA_ARGS__) ")]: \tcalls: %.4d\t\tcycles: %lld\n", \
@@ -88,7 +105,7 @@ unsigned long long __rdtsc(void);
 #define BENCHMARK(x, ...) \
 	BENCHMARK_N(stdout, 1000, x, __VA_ARGS__)
 
-#define BENCHMARK_GROUP_START(file, g_runs, n_runs) \
+#define BENCHMARK_GROUP_BEGIN(file, g_runs, n_runs) \
 	for (int _i = 0; _i < (g_runs); _i++) { \
 		FILE* _outfile = file; \
 		uint64_t _single_runs = (n_runs); \

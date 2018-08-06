@@ -9,12 +9,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\quick_benchmark\quick_benchmark.h">
+    <ClInclude Include="..\..\..\..\include\quick_benchmark\quick_benchmark.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\main.cpp">
+    <ClCompile Include="..\..\..\..\examples\groups.c">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\examples\single.c">
       <Filter>examples</Filter>
     </ClCompile>
   </ItemGroup>
