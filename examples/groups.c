@@ -112,23 +112,23 @@ set_random_avx(int* buff, size_t size) QB_NOINLINE_GCC
 int
 main(int argc, char* argv[])
 {
-	printf("quick_benchmark | %s | examples/groups.c\n\n", QB_VERSION_STR);
+	printf("quick_benchmark | %s <%d> | examples/groups.c\n\n", QB_VERSION_STR, QB_VERSION);
 	int buff[BUFF_SIZE];
 
-	BENCHMARK_GROUP_BEGIN(stdout, 10, 1000);
-		BENCHMARK_GROUP_ADD(set_zero_c, buff, BUFF_SIZE);
-		BENCHMARK_GROUP_ADD(set_zero_memset, buff, BUFF_SIZE);
-		BENCHMARK_GROUP_ADD(set_zero_sse, buff, BUFF_SIZE);
-		BENCHMARK_GROUP_ADD(set_zero_avx, buff, BUFF_SIZE);
-	BENCHMARK_GROUP_END();
+	QB_BENCH_BEGIN(stdout, 10, 1000);
+		QB_BENCH_ADD(set_zero_c, buff, BUFF_SIZE);
+		QB_BENCH_ADD(set_zero_memset, buff, BUFF_SIZE);
+		QB_BENCH_ADD(set_zero_sse, buff, BUFF_SIZE);
+		QB_BENCH_ADD(set_zero_avx, buff, BUFF_SIZE);
+	QB_BENCH_END();
 
 	puts("\n");
 
-	BENCHMARK_GROUP_BEGIN(stdout, 10, 1000);
-		BENCHMARK_GROUP_ADD(set_random_c, buff, BUFF_SIZE);
-		BENCHMARK_GROUP_ADD(set_random_sse, buff, BUFF_SIZE);
-		BENCHMARK_GROUP_ADD(set_random_avx, buff, BUFF_SIZE);
-	BENCHMARK_GROUP_END();
+	QB_BENCH_BEGIN(stdout, 10, 1000);
+		QB_BENCH_ADD_WITH_NAME(set_random_c,   "random fill - C",   buff, BUFF_SIZE);
+		QB_BENCH_ADD_WITH_NAME(set_random_sse, "random fill - SSE", buff, BUFF_SIZE);
+		QB_BENCH_ADD_WITH_NAME(set_random_avx, "random fill - AVX", buff, BUFF_SIZE);
+	QB_BENCH_END();
 
 	getchar();
 }

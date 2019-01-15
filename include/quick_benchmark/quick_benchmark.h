@@ -40,22 +40,25 @@
 #define _QBSTR(...) #__VA_ARGS__
 #define QBSTR _QBSTR
 
-#define QB_VERSION_MAJOR 1
+#define QB_VERSION_MAJOR 2
 #define QB_VERSION_MINOR 0
 #define QB_VERSION_PATCH 0
 #define QB_VERSION_STATE "stable"
 
-#define _QB_VERSION_STR(major, minor, patch) \
+#define QB_VERSION_MAKE_STR(major, minor, patch) \
 	QBSTR(major) "." \
 	QBSTR(minor) "." \
 	QBSTR(patch) "-" \
 	QB_VERSION_STATE
 
 #define QB_VERSION_STR \
-	_QB_VERSION_STR(QB_VERSION_MAJOR, QB_VERSION_MINOR, QB_VERSION_PATCH)
+	QB_VERSION_MAKE_STR(QB_VERSION_MAJOR, QB_VERSION_MINOR, QB_VERSION_PATCH)
 
 #define QB_VERSION_MAKE(major, minor, patch) \
-	((major) << 16) | ((minor) << 8) | (patch))
+	(((major) << 16) | ((minor) << 8) | (patch))
+
+#define QB_VERSION \
+	QB_VERSION_MAKE(QB_VERSION_MAJOR, QB_VERSION_MINOR, QB_VERSION_PATCH)
 
 #ifdef _MSC_VER
 #  ifndef QB_NOINLINE_MSVC
@@ -73,7 +76,7 @@
 #  endif /* !QB_NOINLINE_GCC */
 #endif /* _MSC_VER */
 
-#ifndef QB_BENCHMARK_BENCH_FUNC
+#ifndef QB_SETTINGS_BENCH_FUNC
 #  ifdef _MSC_VER
 #    ifdef __cplusplus
 extern "C" {
@@ -82,39 +85,53 @@ unsigned long long __rdtsc(void);
 #    ifdef __cplusplus
 }
 #    endif
-#    define QB_BENCHMARK_BENCH_FUNC __rdtsc
+#    define QB_SETTINGS_BENCH_FUNC __rdtsc
 #  else
-#    define QB_BENCHMARK_BENCH_FUNC __builtin_ia32_rdtsc
+#    define QB_SETTINGS_BENCH_FUNC __builtin_ia32_rdtsc
 #  endif /* _MSC_VER */
-#endif /* !QB_BENCHMARK_BENCH_FUNC */
+#endif /* !QB_SETTINGS_BENCH_FUNC */
 
-#define BENCHMARK_N(file, n_runs, x, ...) \
+/*------------------------------------------------------------------------------
+	single bench
+------------------------------------------------------------------------------*/
+
+#define QB_BENCH_WITH_NAME(file, n_runs, x, display, ...) \
 	do { \
 		uint64_t _tot = 0; \
 		for (int _j = 0; _j < n_runs; _j++) { \
 			uint64_t _start, _end;	\
-			_start = (uint64_t)QB_BENCHMARK_BENCH_FUNC(); \
+			_start = (uint64_t)QB_SETTINGS_BENCH_FUNC(); \
 			x(__VA_ARGS__); \
-			_end = (uint64_t)QB_BENCHMARK_BENCH_FUNC(); \
+			_end = (uint64_t)QB_SETTINGS_BENCH_FUNC(); \
 			_tot += _end - _start; \
 		} \
-		fprintf(file, "[" QBSTR(x) "(" QBSTR(__VA_ARGS__) ")]: \tcalls: %.4d\t\tcycles: %lld\n", \
-			(int)n_runs, _tot / n_runs); \
+		fprintf(file, "%-50s calls: %.4d %10s %lld\n", \
+			display, (int)n_runs, "value:", _tot / n_runs); \
 	} while(0)
 
-#define BENCHMARK(x, ...) \
-	BENCHMARK_N(stdout, 1000, x, __VA_ARGS__)
+#define QB_BENCH(file, n_runs, x, ...) \
+	QB_BENCH_WITH_NAME(file, n_runs, x, QBSTR(x) "(" QBSTR(__VA_ARGS__) ")", __VA_ARGS__)
 
-#define BENCHMARK_GROUP_BEGIN(file, g_runs, n_runs) \
+#define QB_QUICK_BENCH(x, ...) \
+	QB_BENCH(stdout, 1000, x, __VA_ARGS__)
+
+/*------------------------------------------------------------------------------
+	groups bench
+------------------------------------------------------------------------------*/
+
+#define QB_BENCH_BEGIN(file, g_runs, n_runs) \
 	for (int _i = 0; _i < (g_runs); _i++) { \
 		FILE* _outfile = file; \
 		uint64_t _single_runs = (n_runs); \
-		fprintf(file, "========================================================== n. %.2d\n", _i + 1)
+		fprintf(file, "===================================================================================== n. %.2d\n", _i + 1)
 
-#define BENCHMARK_GROUP_ADD(x, ...) \
-	BENCHMARK_N(_outfile, _single_runs, x, __VA_ARGS__)
+#define QB_BENCH_ADD(x, ...) \
+	QB_BENCH(_outfile, _single_runs, x, __VA_ARGS__)
 
-#define BENCHMARK_GROUP_END() \
+#define QB_BENCH_ADD_WITH_NAME(x, display, ...) \
+	QB_BENCH_WITH_NAME(_outfile, _single_runs, x, display, __VA_ARGS__)
+
+#define QB_BENCH_END() \
 	} ((void)0) /* for the ; */
 
 #endif /* QUICK_BENCHMARK_H */

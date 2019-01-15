@@ -50,16 +50,20 @@ test_multi_param(int v1, int v2, unsigned v3) QB_NOINLINE_GCC
 
 int main()
 {
-	printf("quick_benchmark | %s | examples/single.c\n\n", QB_VERSION_STR);
+	printf("quick_benchmark | %s <%d> | examples/single.c\n\n", QB_VERSION_STR, QB_VERSION);
 
-	/* Be careful not to add void when the function requires no parameters. */
-	BENCHMARK_N(stderr, 200, test_math);
+	/* 'Same' end result, different levels of customization.
+	 * Be careful not to add void when the function requires no parameters.
+	 */
+	QB_BENCH(stderr, 200, test_math);
+	QB_BENCH_WITH_NAME(stderr, 200, test_math, "test math function");
+	QB_QUICK_BENCH(test_math);
 
 	puts("");
-
-	/* These 2 macro do exactly the same thing. */
-	BENCHMARK_N(stdout, 1000, test_multi_param, 30, 56, 120);
-	BENCHMARK(test_multi_param, 30, 56, 120);
+	
+	QB_BENCH(stdout, 1000, test_multi_param, 30, 56, 120);
+	QB_BENCH_WITH_NAME(stdout, 10, test_multi_param, "a function", 30, 56, 120);
+	QB_QUICK_BENCH(test_multi_param, 30, 56, 1200);
 
 	getchar();
 }
