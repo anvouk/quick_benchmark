@@ -1,3 +1,5 @@
+***DEPRECATED:*** improved version available [here](https://github.com/QwertyQaz414/anv)
+
 # quick_benchmark
 A simple C/C++ one header file for quick and dirty benchmarking.<br><br>
 <i><b>See more examples in the <a href="https://github.com/QwertyQaz414/quick_benchmark/tree/master/examples">example folder.</a></i></b>
